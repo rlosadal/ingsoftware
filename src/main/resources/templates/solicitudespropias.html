@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+				
+				</h4>
+				
+				<table id="solicitudDataTable" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Codigo</th>
+							<th>Ingreso</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="solicitud: ${solicitudes}">
+							<td><a class="btn btn-info btn-sm"
+								th:href="@{/versolicitud/} + ${solicitud.id}" th:text="${solicitud.id}"></a></td>
+							<td th:text="${solicitud.codigo}"></td>
+							<td th:text="${#calendars.format(solicitud.fechaCreacion,'dd/MM/yyyy')}"></td>
+							<td th:text="${solicitud.tipoSolicitud.nombre}"></td>
+							<td th:text="${solicitud.estadoSolicitud.nombre}"></td>
+							<td><a class="btn btn-info btn-sm"
+								th:href="@{/solicitudform/} + ${solicitud.id}" th:text="'Editar'" th:if="${not solicitud.isSolicitanteSatisfecho}"></a></td>
+							<td>
+							<div>
+								<a class="btn btn-info btn-sm"
+								th:href="@{/eliminarsolicitud/} + ${solicitud.id}" th:text="'Eliminar'"
+								onclick="return confirm('Esta seguro que desea eliminar la solicitud ?');" th:if="${not solicitud.isSolicitanteSatisfecho}"></a>
+							</div>
+							</td>
+							<td>
+							<div>
+								<a class="btn btn-danger btn-sm"
+								th:href="@{/calificarsolicitud/} + ${solicitud.id}" th:text="'Calificar'"
+								onclick="return confirm('Se encuentra satisfecho con la atencion ?');" th:if="${solicitud.isSolicitanteSatisfecho}"></a>
+							</div>
+							</td>
+
+						</tr>
+					</tbody>
+
+				</table>
+				<span>
+					<br>
+					<a th:href="@{/solicitudform}" class="btn btn-success btn-xs float-right">Nueva Solicitud</a>
+				</span>
+					
+			</div>
+		</div>
+
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>	
+		<script>
+			$(document).ready(function() {
+				$("#solicitudDataTable").DataTable({
+						'responsive': true,
+						"language": {
+				            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+				        },
+						'aoColumnDefs': [{
+        				'bSortable': false,
+        				'aTargets': [-1] /* 1st one, start by the right */
+    				}]
+				});
+			})
+		</script>
+</body>
+</html>

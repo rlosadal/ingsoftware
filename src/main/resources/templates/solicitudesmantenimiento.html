@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+				
+				</h4>
+				
+				<table id="solicitudDataTable" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Codigo</th>
+							<th>Solicitante</th>
+							<th>Ingreso</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="solicitud: ${solicitudes}">
+							<td><a class="btn btn-info btn-sm"
+								th:href="@{/versolicitud/} + ${solicitud.id}" th:text="${solicitud.id}"></a></td>
+							<td th:text="${solicitud.codigo}"></td>
+							<td th:text="${solicitud.usuarioSolicitante.usuario}"></td>
+							<td th:text="${#calendars.format(solicitud.fechaCreacion,'dd/MM/yyyy')}"></td>
+							<td th:text="${solicitud.tipoSolicitud.nombre}"></td>
+							<td th:text="${solicitud.estadoSolicitud.nombre}"></td>
+							<td>
+							<div>
+								<a class="btn btn-info btn-sm"
+								th:href="@{/solicitudresuelta/} + ${solicitud.id}" th:text="'Solucionada'" 
+								onclick="return confirm('Esta por RESOLVER una solicitud esta seguro?');"></a>
+							</div>
+							</td>
+							<td>
+							<div>
+								<a class="btn btn-info btn-sm"
+								th:href="@{/solicitudcambiarestado/} + ${solicitud.id}" th:text="'Cancelada'"
+								onclick="return confirm('Esta seguro que desea CANCELAR la solicitud ?');"></a>
+							</div>
+							</td>
+
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>	
+		<script>
+			$(document).ready(function() {
+				$("#solicitudDataTable").DataTable({
+						'responsive': true,
+						"language": {
+				            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+				        },
+						'aoColumnDefs': [{
+        				'bSortable': false,
+        				'aTargets': [-1] /* 1st one, start by the right */
+    				}]
+				});
+			})
+		</script>
+</body>
+</html>

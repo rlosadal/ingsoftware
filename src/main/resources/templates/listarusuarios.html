@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+				
+				</h4>
+				
+				<table id="usuarioDataTable" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Usuario</th>
+							<th>Email</th>
+							<th>Perfil</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="usuario: ${usuarios}">
+							<td><a class="btn btn-info btn-xs" th:href="@{/verusuario/} + ${usuario.id}" th:text="${usuario.id}"></a></td>
+							<td th:text="${usuario.usuario}"></td>
+							<td th:text="${usuario.email}"></td>
+							<td th:text="${usuario.role.role}"></td>
+							<td><a class="btn btn-info btn-xs" th:href="@{/usuarioform/} + ${usuario.id}" th:text="'Editar'"></a></td>
+							<td>
+							<div sec:authorize="hasAuthority('ADMIN')">
+								<a class="btn btn-info btn-xs"
+								th:href="@{/eliminarusuario/} + ${usuario.id}" th:text="'Eliminar'"
+								onclick="return confirm('Desea eliminar el usuario?');"></a>
+							</div>
+							</td>
+
+						</tr>
+					</tbody>
+
+				</table>
+				<br>
+				<span sec:authorize="hasAuthority('ADMIN')">
+					<a th:href="@{/usuarioform}" class="btn btn-success btn-xs float-right">Nuevo Usuario</a>
+				</span>	
+			</div>
+		</div>
+
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>	
+		<script>
+			$(document).ready(function() {
+				$("#usuarioDataTable").DataTable({
+						'responsive': true,
+						"language": {
+				            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+				        },
+						'aoColumnDefs': [{
+        				'bSortable': false,
+        				'aTargets': [-1] /* 1st one, start by the right */
+    				}]
+				});
+			})
+		</script>
+</body>
+</html>
