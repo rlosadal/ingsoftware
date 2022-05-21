@@ -5,8 +5,12 @@
 <body>
 
 	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
 
-	<div class="container py-4">
+	<div class="container float-right py-4">
 		<div class="card">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
@@ -31,26 +35,26 @@
 
 					<tbody>
 						<tr th:each="solicitud: ${solicitudes}">
-							<td><a class="btn btn-info btn-sm"
+							<td><a class="btn btn-primary btn-sm"
 								th:href="@{/versolicitud/} + ${solicitud.id}" th:text="${solicitud.id}"></a></td>
 							<td th:text="${solicitud.codigo}"></td>
 							<td th:text="${#calendars.format(solicitud.fechaCreacion,'dd/MM/yyyy')}"></td>
 							<td th:text="${solicitud.tipoSolicitud.nombre}"></td>
 							<td th:text="${solicitud.estadoSolicitud.nombre}"></td>
-							<td><a class="btn btn-info btn-sm"
-								th:href="@{/solicitudform/} + ${solicitud.id}" th:text="'Editar'" th:if="${not solicitud.isSolicitanteSatisfecho}"></a></td>
+							<td><a class="btn btn-primary btn-sm"
+								th:href="@{/solicitudform/} + ${solicitud.id}" th:text="'Editar'" th:if = '${solicitud.estadoSolicitud.nombre.equals("NUEVA")}'></a></td>
 							<td>
 							<div>
-								<a class="btn btn-info btn-sm"
+								<a class="btn btn-primary btn-sm"
 								th:href="@{/eliminarsolicitud/} + ${solicitud.id}" th:text="'Eliminar'"
-								onclick="return confirm('Esta seguro que desea eliminar la solicitud ?');" th:if="${not solicitud.isSolicitanteSatisfecho}"></a>
+								onclick="return confirm('Esta seguro que desea eliminar la solicitud ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("NUEVA")}'></a>
 							</div>
 							</td>
 							<td>
 							<div>
-								<a class="btn btn-danger btn-sm"
+								<a class="btn btn-primary btn-sm"
 								th:href="@{/calificarsolicitud/} + ${solicitud.id}" th:text="'Calificar'"
-								onclick="return confirm('Se encuentra satisfecho con la atencion ?');" th:if="${solicitud.isSolicitanteSatisfecho}"></a>
+								onclick="return confirm('Se encuentra satisfecho con la atencion ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("CERRADA")}'></a>
 							</div>
 							</td>
 

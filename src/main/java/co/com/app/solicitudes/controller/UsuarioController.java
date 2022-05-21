@@ -56,7 +56,7 @@ public class UsuarioController {
 			usuarios.add(usuarioLogueado);
 		}
 				
-		model.addAttribute("titulo", "Listado de Usuarios");
+		model.addAttribute("titulo", "USUARIOS DEL SISTEMA");
 		model.addAttribute("usuarios", usuarios);
 		
 		return "listarusuarios";
@@ -68,7 +68,7 @@ public class UsuarioController {
 		Usuario usuario = new Usuario();
 		
 		model.put("usuario", usuario);
-		model.put("titulo", "Formulario de Usuario");
+		model.put("titulo", "FORMULARIO DE USUARIO");
 		model.put("roles", this.rolService.findAll());
 		model.put("areas", this.areaService.findAll());
 		model.put("action", "no_readonly");
@@ -82,7 +82,7 @@ public class UsuarioController {
 		
 		if (result.hasErrors()) {
 			
-			model.addAttribute("titulo", "Formulario de Usuarios");
+			model.addAttribute("titulo", "FORMULARIO DE USUARIO");
 			
 			return "usuarioform";
 		}
@@ -91,7 +91,7 @@ public class UsuarioController {
 		if (usuarioBD != null) {
 			model.addAttribute("error", "El Usuario ya existe, elija otro nombre de usuario!!");
 			model.addAttribute("usuario", usuario);
-			model.addAttribute("titulo", "Formulario de Usuario");
+			model.addAttribute("titulo", "FORMULARIO DE USUARIO");
 			model.addAttribute("roles", this.rolService.findAll());
 			model.addAttribute("areas", this.areaService.findAll());
 			//si es alta de usuario
@@ -117,7 +117,7 @@ public class UsuarioController {
 		
 		status.setComplete();
 		
-		String mensajeFlash = (usuario.getId() != null)? "Usuario editado con éxito" : "Usuario creado con éxito";
+		String mensajeFlash = (usuario.getId() != null)? "Usuario guardado con éxito" : "Usuario guardado con éxito";
 
 		flash.addFlashAttribute("success", mensajeFlash);		
 		
@@ -153,7 +153,7 @@ public class UsuarioController {
 		}
 								
 		model.put("usuario", usuario);
-		model.put("titulo", "Editar Usuario");
+		model.put("titulo", "EDITAR USUARIO");
 		model.put("roles", this.rolService.findAll());
 		model.put("areas", this.areaService.findAll());
 		model.put("action", action);
@@ -182,7 +182,7 @@ public class UsuarioController {
 		}
 		
 		model.put("usuario", usuario);
-		model.put("titulo", "Detalle Usuario: ");
+		model.put("titulo", "DETALLE DE USUARIO: ");
 		
 		return "verusuario";
 	}	

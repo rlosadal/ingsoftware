@@ -5,8 +5,12 @@
 <body>
 
 	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
 
-	<div class="container py-4">
+	<div class="container float-right py-4">
 		<div class="card">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
@@ -29,14 +33,14 @@
 
 					<tbody>
 						<tr th:each="usuario: ${usuarios}">
-							<td><a class="btn btn-info btn-xs" th:href="@{/verusuario/} + ${usuario.id}" th:text="${usuario.id}"></a></td>
+							<td><a class="btn btn-primary btn-xs" th:href="@{/verusuario/} + ${usuario.id}" th:text="${usuario.id}"></a></td>
 							<td th:text="${usuario.usuario}"></td>
 							<td th:text="${usuario.email}"></td>
 							<td th:text="${usuario.role.role}"></td>
-							<td><a class="btn btn-info btn-xs" th:href="@{/usuarioform/} + ${usuario.id}" th:text="'Editar'"></a></td>
+							<td><a class="btn btn-primary btn-xs" th:href="@{/usuarioform/} + ${usuario.id}" th:text="'Editar'"></a></td>
 							<td>
 							<div sec:authorize="hasAuthority('ADMIN')">
-								<a class="btn btn-info btn-xs"
+								<a class="btn btn-primary btn-xs"
 								th:href="@{/eliminarusuario/} + ${usuario.id}" th:text="'Eliminar'"
 								onclick="return confirm('Desea eliminar el usuario?');"></a>
 							</div>

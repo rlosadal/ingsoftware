@@ -5,8 +5,12 @@
 <body>
 
 	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
 
-	<div class="container py-4">
+	<div class="container float-right py-4">
 		<div class="card">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
@@ -31,7 +35,7 @@
 
 					<tbody>
 						<tr th:each="solicitud: ${solicitudes}">
-							<td><a class="btn btn-info btn-sm"
+							<td><a class="btn btn-primary btn-sm"
 								th:href="@{/versolicitud/} + ${solicitud.id}" th:text="${solicitud.id}"></a></td>
 							<td th:text="${solicitud.codigo}"></td>
 							<td th:text="${solicitud.usuarioSolicitante.usuario}"></td>
@@ -40,14 +44,14 @@
 							<td th:text="${solicitud.estadoSolicitud.nombre}"></td>
 							<td>
 							<div>
-								<a class="btn btn-info btn-sm"
+								<a class="btn btn-primary btn-sm"
 								th:href="@{/solicitudresuelta/} + ${solicitud.id}" th:text="'Solucionada'" 
 								onclick="return confirm('Esta por RESOLVER una solicitud esta seguro?');"></a>
 							</div>
 							</td>
 							<td>
 							<div>
-								<a class="btn btn-info btn-sm"
+								<a class="btn btn-primary btn-sm"
 								th:href="@{/solicitudcambiarestado/} + ${solicitud.id}" th:text="'Cancelada'"
 								onclick="return confirm('Esta seguro que desea CANCELAR la solicitud ?');"></a>
 							</div>

@@ -5,8 +5,12 @@
 <body>
 
 	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
 
-	<div class="container py-4">
+	<div class="container float-right py-4">
 		<div class="card">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
@@ -31,7 +35,7 @@
 
 					<tbody>
 						<tr th:each="solicitud: ${solicitudes}">
-							<td><a class="btn btn-info btn-sm"
+							<td><a class="btn btn-primary btn-sm"
 								th:href="@{/versolicitud/} + ${solicitud.id}" th:text="${solicitud.id}"></a></td>
 							<td th:text="${solicitud.codigo}"></td>
 							<td th:text="${solicitud.usuarioSolicitante.nombreCompleto}"></td>
@@ -40,14 +44,14 @@
 							<td th:text="${solicitud.estadoSolicitud.nombre}"></td>
 							<td>
 							<div>
-							<a class="btn btn-warning btn-sm"
+							<a class="btn btn-primary btn-sm"
 								th:href="@{/solicitudenprogreso/} + ${solicitud.id}" th:text="'En progreso'"
 								onclick="return confirm('Desea dar INICIO a la solicitud ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("NUEVA")}'></a>
 							</div>	
 							</td>
 							<td>
 							<div>
-								<a class="btn btn-danger btn-sm"
+								<a class="btn-primary btn-sm"
 								th:href="@{/solicitudcerrada/} + ${solicitud.id}" th:text="'Cerrada'"
 								onclick="return confirm('Desea CERRAR la solicitud ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("RESUELTA") or solicitud.estadoSolicitud.nombre.equals("CANCELADA")}'></a>
 							</div>

@@ -4,8 +4,12 @@
 <body>
 
 	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
 
-	<div class="container py-4">
+	<div class="container float-right py-4">
 
 		<div class="card">
 			<div class="card-header" th:text="${titulo}"></div>
@@ -17,9 +21,10 @@
 				<p class="card-text"><span class="font-weight-bold">Fecha creaci&oacute;n: </span><span th:text="${#calendars.format(solicitud.fechaCreacion,'dd/MM/yyyy')}"></span></p>
 				<p class="card-text"><span class="font-weight-bold">Tipo solicitud: </span><span th:text="${solicitud.tipoSolicitud.nombre}"></span></p>
 				<p class="card-text"><span class="font-weight-bold">Estado: </span><span th:text="${solicitud.estadoSolicitud.nombre}"></span></p>
-				<p class="card-text"><span class="font-weight-bold">Cliente: </span><span th:text="${solicitud.cliente}"></span></p>
-				<p class="card-text"><span class="font-weight-bold">Tel&eacute;fono: </span><span th:text="${solicitud.telefono}"></span></p>
-				<p class="card-text"><span class="font-weight-bold">Email: </span><span th:text="${solicitud.email}"></span></p>
+				<p class="card-text"><span class="font-weight-bold">Solicitante: </span><span th:text="${solicitud.usuarioSolicitante.usuario}"></span></p>
+				<p class="card-text"><span class="font-weight-bold">Email: </span><span th:text="${solicitud.usuarioSolicitante.email}"></span></p>
+				<p class="card-text"><span class="font-weight-bold">Obs.del equipo: </span><span th:text="${solicitud.equipo.observaciones}"></span></p>
+				
 
 
 			</div>

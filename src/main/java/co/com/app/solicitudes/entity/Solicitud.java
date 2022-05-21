@@ -53,11 +53,11 @@ public class Solicitud {
 	@Column(name = "fecha_cerrada")
 	private Date fechaCerrada;
 		
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="id_tipo_solicitud")
 	private TipoSolicitud tipoSolicitud;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="id_estado_solicitud")
 	private EstadoSolicitud estadoSolicitud;
 		
@@ -65,11 +65,11 @@ public class Solicitud {
 	@JoinColumn(name="id_equipo")
 	private Equipo equipo;
 		
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="id_usuario_solicitante")
 	private Usuario usuarioSolicitante;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="id_usuario_resolutivo")
 	private Usuario usuarioResolutivo;
 	

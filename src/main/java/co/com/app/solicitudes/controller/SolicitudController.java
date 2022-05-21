@@ -206,7 +206,7 @@ public class SolicitudController {
 		}
 		
 		model.put("solicitud", solicitud);
-		model.put("titulo", "Detalle de la Solicitud");
+		model.put("titulo", "DETALLE DE LA SOLICITUD");
 		
 		return "versolicitud";
 	}	
