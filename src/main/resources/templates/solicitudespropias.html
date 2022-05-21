@@ -54,7 +54,7 @@
 							<div>
 								<a class="btn btn-primary btn-sm"
 								th:href="@{/calificarsolicitud/} + ${solicitud.id}" th:text="'Calificar'"
-								onclick="return confirm('Se encuentra satisfecho con la atencion ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("CERRADA")}'></a>
+								onclick="return confirm('Se encuentra satisfecho con la atencion ?');" th:if = '${solicitud.estadoSolicitud.nombre.equals("RESUELTA")}'></a>
 							</div>
 							</td>
 

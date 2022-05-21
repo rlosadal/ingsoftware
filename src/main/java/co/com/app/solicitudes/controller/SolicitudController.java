@@ -1,5 +1,6 @@
 package co.com.app.solicitudes.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -190,7 +191,7 @@ public class SolicitudController {
 		if (id > 0) {
 			Solicitud solicitud = this.solicitudService.findById(id);
 			solicitud.setSolicitanteSatisfecho(true);
-			this.solicitudService.delete(id);
+			this.solicitudService.save(solicitud);
 			flash.addFlashAttribute("success", "Gracias por calificarnos!");			
 		}
 		return "redirect:/solicitudespropias";
@@ -264,16 +265,32 @@ public class SolicitudController {
 		if("EN_PROGRESO".equals(siguienteEstado)) {
 			solicitud.setFechaEnProceso(new Date());
 		} else if("RESUELTA".equals(siguienteEstado)) {
-			solicitud.setFechaResuelta(new Date());
+			
+			//para test lo se resuelve la solicitud a los tres dias
+			//Calendar cal = Calendar.getInstance();
+	        //cal.setTime(solicitud.getFechaEnProceso());
+	        //cal.add(Calendar.DATE, 3); 
+	        //solicitud.setFechaResuelta(cal.getTime());
+	        
+	        //orginal
+	        solicitud.setFechaResuelta(new Date());
+	        
 			//AQUI SE CALCULA EL TIEMPO QUE SE TARDO EN RESOLVER LA SOLICITUD
 			if(solicitud.getFechaEnProceso()!=null) {
-				long tmp = solicitud.getFechaResuelta().getTime() - solicitud.getFechaEnProceso().getTime();
-				long dias = tmp/(24*60*60*1000);
-				long horas = (tmp/(60*60*1000) - dias*24);
-				Long tiempoDeResolucion = Long.valueOf(horas);
-				solicitud.setTiempoDeResolucion(tiempoDeResolucion);
+				
+				long diferenciaEnTime = solicitud.getFechaResuelta().getTime() - solicitud.getFechaEnProceso().getTime();
+				long diferenciaEnSegundos = diferenciaEnTime / 1000 % 60;
+				long diferenciaEnMinutos = diferenciaEnTime / (60 * 1000) % 60;
+				long diferenciaEnHoras = diferenciaEnTime / (60 * 60 * 1000) ;
+				long diferenciaEnDias = diferenciaEnTime / (24 * 60 * 60 * 1000);
+				
+                Long tiempoDeResolucion = Long.valueOf(diferenciaEnHoras);
+				
+                solicitud.setTiempoDeResolucion(tiempoDeResolucion);
+				
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 				Usuario usuarioLogueado = this.usuarioService.findByUsuario(authentication.getName());
+				
 				solicitud.setUsuarioResolutivo(usuarioLogueado);
 			}
 			
