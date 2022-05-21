@@ -9,6 +9,8 @@ public interface AreaService {
 	public Area findById(Long id);
 	
 	public List<Area> findAll();
+	
+	public List<Area> findByNombre(String nombre);
 
 
 }

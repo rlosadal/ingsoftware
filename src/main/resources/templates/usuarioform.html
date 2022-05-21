@@ -20,7 +20,8 @@
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label">Perfil</label>
 						<div class="col-sm-6">
-							<select class="form-control" th:field="*{role.id}" th:readonly="${action=='readonly'}">
+							<select id="comboRol" name="comboRol" class="form-control" th:field="*{role.id}" 
+								th:readonly="${action=='readonly'}">
 								<option th:each="role: ${roles}" th:value="${role.id}"
 									                           th:text="${role.nombre}"
 									    th:selected="${role.id} == ${usuario.role.id}"></option>
@@ -31,7 +32,7 @@
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label">Area</label>
 						<div class="col-sm-6">
-							<select class="form-control" th:field="*{area.id}" th:readonly="${action=='readonly'}">
+							<select id="comboArea" name="comboArea" class="form-control" th:field="*{area.id}" th:readonly="${action=='readonly'}">
 								<option th:each="area: ${areas}" th:value="${area.id}"
 									                           th:text="${area.nombre}"
 									    th:selected="${area.id} == ${usuario.area.id}"></option>
@@ -97,17 +98,41 @@
 		</div>
 
 	</div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-		crossorigin="anonymous"></script>
+	<footer th:replace="layout/layout :: footer"></footer>	
+	<script>
+		$(document).ready(function(){
+			 $('#comboRol').change(
+				        function() {
+				            $.getJSON("http://localhost:8080/areas", {
+				                roleId : $(this).val()
+				            }, function(data) {
+				                var html = '';
+				                var len = data.length;
+				                for ( var i = 0; i < len; i++) {
+				                    html += '<option value="' + data[i].id + '">'
+				                            + data[i].nombre + '</option>';
+				                }
+				                html += '</option>';
+				                $('#comboArea').html(html);
+				            });
+				        });
+		});
+		//function refreshComboArea() {
+		    /*var chosenShowtime = $("showTime").val();
+		    for (i=0;i<showTimeList.length;i++) {
+		        if (showTimeList[i].id == chosenShowTime) {
+		            $('#secondBox option').remove();
+		            seats = showTimeList[i].SeatingList;
+		            for (n=0;m<seats.length;n++) {
+		                $('#secondBox').append($('<option>', {
+		                    value: seats[n].id,
+		                    text: seats[n].seatNo
+		                }));
+		            }
+		            $("#secondBox").trigger("chosen:updated");
+		        }
+		    }*/
+		//}
+	</script>
 </body>
 </html>

@@ -3,6 +3,8 @@ package co.com.app.solicitudes.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -18,10 +20,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import co.com.app.solicitudes.entity.Area;
+import co.com.app.solicitudes.entity.Role;
 import co.com.app.solicitudes.entity.Usuario;
 import co.com.app.solicitudes.service.AreaService;
 import co.com.app.solicitudes.service.RoleService;
@@ -65,12 +71,19 @@ public class UsuarioController {
 	@RequestMapping(value = "/usuarioform")
 	public String crear(Map<String, Object> model) {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuarioLogueado = this.usuarioService.findByUsuario(authentication.getName());
 		Usuario usuario = new Usuario();
-		
-		model.put("usuario", usuario);
+		List<Area> areas = new ArrayList<>();
+	   	    		
+		if("ADMIN".equals(usuarioLogueado.getRole().getRole())) {
+	    	areas = this.areaService.findByNombre("SISTEMAS");
+	    } 
+	    	                
+	    model.put("usuario", usuario);
 		model.put("titulo", "FORMULARIO DE USUARIO");
 		model.put("roles", this.rolService.findAll());
-		model.put("areas", this.areaService.findAll());
+		model.put("areas", areas);
 		model.put("action", "no_readonly");
 		
 		return "usuarioform";
@@ -128,6 +141,7 @@ public class UsuarioController {
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
 		Usuario usuario = null;
+		List<Area> areas = new ArrayList<>();
 
 		if (id > 0) {
 			usuario = usuarioService.findById(id);
@@ -145,17 +159,21 @@ public class UsuarioController {
 				
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<SimpleGrantedAuthority> lista = (List<SimpleGrantedAuthority>)authentication.getAuthorities();
-		String rol = lista.get(0).getAuthority();
-		
+		String role = lista.get(0).getAuthority();
+						
 		String action = "readonly";
-		if(rol.equals("ADMIN")) {
+		
+		if(role.equals("ADMIN")) {
 			action = "no_readonly";
+			areas = this.getFilterAreas(usuario.getRole().getRole());
+		} else {
+			areas = this.areaService.findAll();
 		}
 								
 		model.put("usuario", usuario);
 		model.put("titulo", "EDITAR USUARIO");
 		model.put("roles", this.rolService.findAll());
-		model.put("areas", this.areaService.findAll());
+		model.put("areas", areas);
 		model.put("action", action);
 		
 		return "usuarioform";
@@ -185,6 +203,42 @@ public class UsuarioController {
 		model.put("titulo", "DETALLE DE USUARIO: ");
 		
 		return "verusuario";
-	}	
+	}
+	
+	@GetMapping(value = "/areas")
+	public @ResponseBody List<Area> findAreas(@RequestParam(value = "roleId", required = true) Long roleId) {
+		
+		Role role = this.rolService.findById(roleId);
+		List<Area> areas = this.getFilterAreas(role.getRole());
+	        
+	    return areas;
+	}
+	
+	private List<Area> getFilterAreas(String role){
+		
+		List<Area> areas = new ArrayList<>();
+	    	    
+	    if("ADMIN".equals(role)) {
+	    	areas = this.areaService.findByNombre("SISTEMAS");
+	    } else if("HELP_DESK".equals(role)){
+	    	areas = this.areaService.findByNombre("CALL_CENTER");
+	    } else if("SUPPORT".equals(role)) {
+	    	areas = this.areaService.findByNombre("TECNOLOGIA");
+	    } else {
+	    	List<Area> tmp = this.areaService.findAll();
+	    	// filter 1
+	        Predicate<Area> noSistemas = area -> !area.getNombre().contains("SISTEMAS");
+	        // filter 2
+	        Predicate<Area> noCallCenter = area -> !area.getNombre().contains("CALL_CENTER");
+	        // filter 3
+	        Predicate<Area> noTecnologia = area -> !area.getNombre().contains("TECNOLOGIA");
 
+	        areas = tmp.stream().filter(noSistemas)
+	                .filter(noCallCenter).filter(noTecnologia).collect(Collectors.toList());
+	    }
+	    
+	    return areas;
+		
+	}
+	
 }

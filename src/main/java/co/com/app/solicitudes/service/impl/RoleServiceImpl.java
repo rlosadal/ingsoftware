@@ -13,18 +13,24 @@ import co.com.app.solicitudes.service.RoleService;
 public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
-	private RoleRepository roleDao;
+	private RoleRepository roleRepository;
 
 	@Override
 	public Role findById(Long id) {
 		
-		return this.roleDao.findById(id).orElse(null);
+		return this.roleRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public List<Role> findAll() {
 		
-		return (List<Role>) this.roleDao.findAll();
+		return (List<Role>) this.roleRepository.findAll();
+	}
+
+	@Override
+	public List<Role> findByRole(String role) {
+		
+		return (List<Role>) this.roleRepository.findByRole(role);
 	}
 
 }
