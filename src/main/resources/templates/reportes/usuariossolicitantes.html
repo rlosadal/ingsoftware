@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
+
+	<div class="container float-right py-4">
+
+		<div class="card">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+			
+				<form th:action="@{/searchusuariossolicitantes}" th:object="${filter}" method="get">
+				  <div class="form-row align-items-center">
+				    <div class="col-auto my-1">
+				      <label class="mr-sm-2" for="inlineFormCustomSelect">Fecha desde</label>
+				      <input type="date" th:field="*{fechaDesde}" class="form-control"/>
+				    </div>
+				    <div class="col-auto my-1">
+				      <label class="mr-sm-2" for="inlineFormCustomSelect">Fecha hasta</label>
+				      <input type="date" th:field="*{fechaHasta}" class="form-control"/>
+				    </div>
+				    <div class="col-auto my-1">
+				      <button type="submit" class="btn btn-primary">Buscar</button>
+				    </div>
+				  </div>
+				</form>
+				<br>
+				<table id="usuarioDataTable" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Usuario</th>
+							<th>Nombre completo</th>
+							<th>Cantidad</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="data: ${resultado}">
+							<td th:text="${data.data1}"></td>
+							<td th:text="${data.data2}"></td>
+							<td th:text="${data.data3}"></td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+        <footer th:replace="layout/layout :: footer"></footer>	
+       
+</body>
+</html>

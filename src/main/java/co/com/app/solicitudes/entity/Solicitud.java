@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
 @Table(name = "solicitudes")
 public class Solicitud {
@@ -28,28 +26,31 @@ public class Solicitud {
 	@Column(name = "codigo")
 	private String codigo;
 	
-	@Temporal(TemporalType.TIMESTAMP)	
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@Temporal(TemporalType.DATE)	
 	@Column(name = "fecha_creacion")
 	private Date fechaCreacion;
 	
-	@Temporal(TemporalType.TIMESTAMP)	
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@Temporal(TemporalType.DATE)	
 	@Column(name = "fecha_en_proceso")
 	private Date fechaEnProceso;
 	
 	@Temporal(TemporalType.TIMESTAMP)	
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-	@Column(name = "fecha_Resuelta")
+	@Column(name = "fecha_hora_en_proceso")
+	private Date fechaHoraEnProceso;
+	
+	@Temporal(TemporalType.DATE)	
+	@Column(name = "fecha_resuelta")
 	private Date fechaResuelta;
 	
 	@Temporal(TemporalType.TIMESTAMP)	
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@Column(name = "fecha_hora_resuelta")
+	private Date fechaHoraResuelta;
+	
+	@Temporal(TemporalType.DATE)	
 	@Column(name = "fecha_cancelada")
 	private Date fechaCancelada;
 	
-	@Temporal(TemporalType.TIMESTAMP)	
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@Temporal(TemporalType.DATE)	
 	@Column(name = "fecha_cerrada")
 	private Date fechaCerrada;
 		
@@ -74,7 +75,7 @@ public class Solicitud {
 	private Usuario usuarioResolutivo;
 	
 	@Column(name = "tiempo_de_resolucion")
-	private Long tiempoDeResolucion = 0L;
+	private Integer tiempoDeResolucion = 0;
 	
 	@Column(name = "solicitante_satisfecho")
 	private boolean solicitanteSatisfecho = false;
@@ -83,17 +84,17 @@ public class Solicitud {
 		
 	}
 	
-	
-
-	public Solicitud(String codigo, Date fechaCreacion, Date fechaEnProceso, Date fechaResuelta, Date fechaCancelada,
-			Date fechaCerrada, TipoSolicitud tipoSolicitud, EstadoSolicitud estadoSolicitud, Equipo equipo,
-			Usuario usuarioSolicitante, Usuario usuarioResolutivo, Long tiempoDeResolucion,
-			boolean solicitanteSatisfecho) {
+	public Solicitud(String codigo, Date fechaCreacion, Date fechaEnProceso, Date fechaHoraEnProceso,
+			Date fechaResuelta, Date fechaHoraResuelta, Date fechaCancelada, Date fechaCerrada,
+			TipoSolicitud tipoSolicitud, EstadoSolicitud estadoSolicitud, Equipo equipo, Usuario usuarioSolicitante,
+			Usuario usuarioResolutivo, Integer tiempoDeResolucion, boolean solicitanteSatisfecho) {
 
 		this.codigo = codigo;
 		this.fechaCreacion = fechaCreacion;
 		this.fechaEnProceso = fechaEnProceso;
+		this.fechaHoraEnProceso = fechaHoraEnProceso;
 		this.fechaResuelta = fechaResuelta;
+		this.fechaHoraResuelta = fechaHoraResuelta;
 		this.fechaCancelada = fechaCancelada;
 		this.fechaCerrada = fechaCerrada;
 		this.tipoSolicitud = tipoSolicitud;
@@ -104,7 +105,6 @@ public class Solicitud {
 		this.tiempoDeResolucion = tiempoDeResolucion;
 		this.solicitanteSatisfecho = solicitanteSatisfecho;
 	}
-
 
 
 
@@ -281,14 +281,14 @@ public class Solicitud {
 //	}
 
 
-	public Long getTiempoDeResolucion() {
+	public Integer getTiempoDeResolucion() {
 		return tiempoDeResolucion;
 	}
 
 
 
 
-	public void setTiempoDeResolucion(Long tiempoDeResolucion) {
+	public void setTiempoDeResolucion(Integer tiempoDeResolucion) {
 		this.tiempoDeResolucion = tiempoDeResolucion;
 	}
 
@@ -302,6 +302,29 @@ public class Solicitud {
 	public void setSolicitanteSatisfecho(boolean solicitanteSatisfecho) {
 		this.solicitanteSatisfecho = solicitanteSatisfecho;
 	}
+	
+	
+	public Date getFechaHoraEnProceso() {
+		return fechaHoraEnProceso;
+	}
+
+
+	public void setFechaHoraEnProceso(Date fechaHoraEnProceso) {
+		this.fechaHoraEnProceso = fechaHoraEnProceso;
+	}
+
+
+
+	public Date getFechaHoraResuelta() {
+		return fechaHoraResuelta;
+	}
+
+
+
+	public void setFechaHoraResuelta(Date fechaHoraResuelta) {
+		this.fechaHoraResuelta = fechaHoraResuelta;
+	}
+
 
 
 	@Override

@@ -264,28 +264,30 @@ public class SolicitudController {
 		
 		if("EN_PROGRESO".equals(siguienteEstado)) {
 			solicitud.setFechaEnProceso(new Date());
+			solicitud.setFechaHoraEnProceso(new Date());
 		} else if("RESUELTA".equals(siguienteEstado)) {
 			
 			//para test lo se resuelve la solicitud a los tres dias
 			//Calendar cal = Calendar.getInstance();
-	        //cal.setTime(solicitud.getFechaEnProceso());
+	        //cal.setTime(new Date());
 	        //cal.add(Calendar.DATE, 3); 
 	        //solicitud.setFechaResuelta(cal.getTime());
+	        //solicitud.setFechaHoraResuelta(cal.getTime());
 	        
 	        //orginal
 	        solicitud.setFechaResuelta(new Date());
-	        
+	        solicitud.setFechaHoraResuelta(new Date());
 			//AQUI SE CALCULA EL TIEMPO QUE SE TARDO EN RESOLVER LA SOLICITUD
 			if(solicitud.getFechaEnProceso()!=null) {
 				
-				long diferenciaEnTime = solicitud.getFechaResuelta().getTime() - solicitud.getFechaEnProceso().getTime();
+				long diferenciaEnTime = solicitud.getFechaHoraResuelta().getTime() - solicitud.getFechaHoraEnProceso().getTime();
 				long diferenciaEnSegundos = diferenciaEnTime / 1000 % 60;
 				long diferenciaEnMinutos = diferenciaEnTime / (60 * 1000) % 60;
 				long diferenciaEnHoras = diferenciaEnTime / (60 * 60 * 1000) ;
 				long diferenciaEnDias = diferenciaEnTime / (24 * 60 * 60 * 1000);
 				
-                Long tiempoDeResolucion = Long.valueOf(diferenciaEnHoras);
-				
+                Integer tiempoDeResolucion = Long.valueOf(diferenciaEnHoras).intValue();
+
                 solicitud.setTiempoDeResolucion(tiempoDeResolucion);
 				
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
