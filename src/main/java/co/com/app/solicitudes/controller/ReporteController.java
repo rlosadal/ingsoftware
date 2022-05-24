@@ -1,6 +1,5 @@
 package co.com.app.solicitudes.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,9 +31,14 @@ public class ReporteController {
 		//Date fechaHasta = SolicitudUtil.getFechaHasta();
 		Date fechaDesde = new Date();
 		Date fechaHasta = new Date();
+		Integer promedio = 0 ;
         
-        Integer promedio = this.solicitudService.findByTimpoResolucion(fechaDesde, fechaHasta);
-        
+		try {
+			promedio = this.solicitudService.findByTimpoResolucion(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		        
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
@@ -60,7 +64,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			promedio = this.solicitudService.findByTimpoResolucion(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -69,6 +73,63 @@ public class ReporteController {
 		model.addAttribute("promedio", promedio!=null? promedio.toString() : 0);
 		
 		return "reportes/tiemporesolucion";
+	}
+	
+	@RequestMapping(value = "/loadclientessatisfechos", method = RequestMethod.GET)
+	public String loadClientesSatisfechos(Model model) {
+		
+		//Date fechaDesde = SolicitudUtil.getFechaDesde();
+		//Date fechaHasta = SolicitudUtil.getFechaHasta();
+		Date fechaDesde = new Date();
+		Date fechaHasta = new Date();
+		Integer totalAtendidos = 0 ;
+		Integer totalSatisfechos = 0;
+		
+		try {
+			totalAtendidos = this.solicitudService.findByTotalSolicitudesAtentendidas(fechaDesde, fechaHasta);
+	        totalSatisfechos = this.solicitudService.findByTotalSolicitudesSatisfechas(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+                
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaDesdeFormateada= DateFor.format(fechaDesde);
+        String fechaHastaFormateada= DateFor.format(fechaHasta);
+        
+        Filter filter = new Filter(fechaDesdeFormateada, fechaHastaFormateada);
+        		
+        model.addAttribute("titulo", "REPORTE CLIENTES SATISFECHOS");
+        model.addAttribute("filter", filter);
+		model.addAttribute("totalAtendidos", totalAtendidos!=null? totalAtendidos.toString() : 0);
+		model.addAttribute("totalSatisfechos", totalSatisfechos!=null? totalSatisfechos.toString() : 0);
+		
+		return "reportes/clientessatisfechos";
+	}
+	
+	@RequestMapping(value = "/searchclientessatisfechos", method = RequestMethod.GET)
+	public String searchClientesSatisfechos(Filter filter, Model model) {
+		
+		Integer totalAtendidos = 0;
+		Integer totalSatisfechos = 0;
+		Date fechaDesde = new Date();
+		Date fechaHasta = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try{
+			fechaDesde = sdf.parse(filter.getFechaDesde());
+			fechaHasta = sdf.parse(filter.getFechaHasta());
+			totalAtendidos = this.solicitudService.findByTotalSolicitudesAtentendidas(fechaDesde, fechaHasta);
+	        totalSatisfechos = this.solicitudService.findByTotalSolicitudesSatisfechas(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("titulo", "REPORTE CLIENTES SATISFECHOS");
+        model.addAttribute("filter", filter);
+		model.addAttribute("totalAtendidos", totalAtendidos!=null? totalAtendidos.toString() : 0);
+		model.addAttribute("totalSatisfechos", totalSatisfechos!=null? totalSatisfechos.toString() : 0);
+		
+		return "reportes/clientessatisfechos";
 	}
 	
 	@RequestMapping(value = "/loadsolicitudesatendidasporperiodo", method = RequestMethod.GET)
@@ -81,8 +142,12 @@ public class ReporteController {
 		Date fechaDesde = new Date();
 		Date fechaHasta = new Date();
         
-		resultado = this.solicitudService.findBySolicitudesAtendidasPorPeriodo(fechaDesde, fechaHasta);
-        
+		try {
+			resultado = this.solicitudService.findBySolicitudesAtendidasPorPeriodo(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		        
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
@@ -108,7 +173,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			resultado = this.solicitudService.findBySolicitudesAtendidasPorPeriodo(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -133,8 +198,12 @@ public class ReporteController {
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
         
-		resultado = this.solicitudService.findBySolicitudesSinAtenderPorPeriodo(fechaDesde, fechaHasta);
-               
+        try {
+        	resultado = this.solicitudService.findBySolicitudesSinAtenderPorPeriodo(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		              
         
         Filter filter = new Filter(fechaDesdeFormateada, fechaHastaFormateada);
         		
@@ -157,7 +226,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			resultado = this.solicitudService.findBySolicitudesSinAtenderPorPeriodo(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -178,8 +247,12 @@ public class ReporteController {
 		Date fechaDesde = new Date();
 		Date fechaHasta = new Date();
         
-		resultado = this.solicitudService.findByConfiguracionesDeEquipo(fechaDesde, fechaHasta);
-        
+		try {
+			resultado = this.solicitudService.findByConfiguracionesDeEquipo(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		        
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
@@ -205,7 +278,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			resultado = this.solicitudService.findByConfiguracionesDeEquipo(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -226,8 +299,12 @@ public class ReporteController {
 		Date fechaDesde = new Date();
 		Date fechaHasta = new Date();
         
-		resultado = this.solicitudService.findByDepartamentoMasSolicitante(fechaDesde, fechaHasta);
-        
+		try {
+			resultado = this.solicitudService.findByDepartamentoMasSolicitante(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		        
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
@@ -253,7 +330,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			resultado = this.solicitudService.findByDepartamentoMasSolicitante(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -274,8 +351,12 @@ public class ReporteController {
 		Date fechaDesde = new Date();
 		Date fechaHasta = new Date();
         
-		resultado = this.solicitudService.findByUsuariosSolicitantes(fechaDesde, fechaHasta);
-        
+		try {
+			resultado = this.solicitudService.findByUsuariosSolicitantes(fechaDesde, fechaHasta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		        
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         String fechaDesdeFormateada= DateFor.format(fechaDesde);
         String fechaHastaFormateada= DateFor.format(fechaHasta);
@@ -301,7 +382,7 @@ public class ReporteController {
 			fechaDesde = sdf.parse(filter.getFechaDesde());
 			fechaHasta = sdf.parse(filter.getFechaHasta());
 			resultado = this.solicitudService.findByUsuariosSolicitantes(fechaDesde, fechaHasta);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -311,7 +392,6 @@ public class ReporteController {
 		
 		return "reportes/usuariossolicitantes";
 	}
-	
-	
+		
 
 }

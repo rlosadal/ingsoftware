@@ -1,5 +1,6 @@
 package co.com.app.solicitudes.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,15 +62,39 @@ public class SolicitudServiceImpl implements SolicitudService{
 	@Override
 	public Integer findByTimpoResolucion(Date fechaDesde, Date fechaHasta) {
 		Integer promedio = 0;
-		List<Object> result = this.solicitudRepository.findByTimpoResolucion(fechaDesde, fechaHasta);
+		List<BigDecimal> result = this.solicitudRepository.findByTimpoResolucion(fechaDesde, fechaHasta);
 		if(!result.isEmpty()) {
-			 List<Object> resultList = new ArrayList(result.size());
-		        for(Object obj:resultList){
-		            resultList.add(Integer.valueOf(String.valueOf(obj)));
+			 List<Integer> resultList = new ArrayList();
+		        for(BigDecimal obj:result){
+		        	if(obj!=null) {
+		        		resultList.add(Integer.valueOf(obj.intValue()));
+		        	}
 		        }
-		        promedio = (Integer)result.get(0);
+		        if(!resultList.isEmpty()) {
+		        	promedio = resultList.get(0);
+		        }
 		}
 		return promedio;
+	}
+	
+	@Override
+	public Integer findByTotalSolicitudesAtentendidas(Date fechaDesde, Date fechaHasta) {
+		Integer totalAtendidos = null;
+		List<Object> result = this.solicitudRepository.findByTotalSolicitudesAtentendidas(fechaDesde, fechaHasta);
+		for (Object object : result) {
+			totalAtendidos = Integer.valueOf(String.valueOf(object));
+		}
+		return totalAtendidos!=null?totalAtendidos:0;
+	}
+
+	@Override
+	public Integer findByTotalSolicitudesSatisfechas(Date fechaDesde, Date fechaHasta) {
+		Integer totalSatisfechos = null;
+		List<Object> result = this.solicitudRepository.findByTotalSolicitudesSatisfechas(fechaDesde, fechaHasta);
+		for (Object object : result) {
+			totalSatisfechos = Integer.valueOf(String.valueOf(object));
+		}
+		return totalSatisfechos!=null?totalSatisfechos:0;
 	}
 	
 	@Override

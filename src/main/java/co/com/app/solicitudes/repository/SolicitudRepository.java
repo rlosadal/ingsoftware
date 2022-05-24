@@ -1,5 +1,7 @@
 package co.com.app.solicitudes.repository;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -21,14 +23,27 @@ public interface SolicitudRepository extends CrudRepository<Solicitud, Long>{
 	//reportes//
 	@Query(value = "SELECT avg(tiempo_de_resolucion) FROM solicitudes soli "
 			+ "WHERE soli.fecha_resuelta is not null AND soli.fecha_resuelta BETWEEN ?1 AND ?2", nativeQuery = true)
-	public List<Object> findByTimpoResolucion(Date fechaDesde, Date fechaHasta);
+	public List<BigDecimal> findByTimpoResolucion(Date fechaDesde, Date fechaHasta);
+		
+	
+	@Query(value = "SELECT count(*) as cantidadtotal " + 
+			"FROM solicitudes as sol " + 
+			"WHERE sol.fecha_resuelta is not null " + 
+			"and sol.fecha_resuelta BETWEEN ?1 AND ?2 " , nativeQuery = true)
+	public List<Object> findByTotalSolicitudesAtentendidas(Date fechaDesde, Date fechaHasta);
+	
+	@Query(value = "SELECT count(*) as cantidad " + 
+			"FROM solicitudes as sol " + 
+			"WHERE sol.solicitante_satisfecho = True " + 
+			"AND sol.fecha_resuelta BETWEEN ?1 AND ?2 " , nativeQuery = true)
+	public List<Object> findByTotalSolicitudesSatisfechas (Date fechaDesde, Date fechaHasta);
 	
 	@Query(value = "SELECT ts.nombre as nombre, count(*) as cantidad " + 
 			"FROM solicitudes as sol " + 
 			"INNER JOIN tipo_solicitud as ts " + 
 			"ON(sol.id_tipo_solicitud = ts.id) " + 
 			"WHERE sol.fecha_resuelta is not null " + 
-			"and sol.fecha_resuelta BETWEEN ?1 AND ?2 " + 
+			"AND sol.fecha_resuelta BETWEEN ?1 AND ?2 " + 
 			"GROUP BY ts.nombre ", nativeQuery = true)
 	public List<Object[]> findBySolicitudesAtendidasPorPeriodo(Date fechaDesde, Date fechaHasta);
 	
@@ -37,7 +52,7 @@ public interface SolicitudRepository extends CrudRepository<Solicitud, Long>{
 			"INNER JOIN tipo_solicitud as ts " + 
 			"ON(sol.id_tipo_solicitud = ts.id) " + 
 			"WHERE sol.fecha_en_proceso is null " + 
-			"and sol.fecha_creacion BETWEEN ?1 AND ?2 " + 
+			"AND sol.fecha_creacion BETWEEN ?1 AND ?2 " + 
 			"GROUP BY ts.nombre ", nativeQuery = true)
 	public List<Object[]> findBySolicitudesSinAtenderPorPeriodo(Date fechaDesde, Date fechaHasta);
 	
@@ -61,7 +76,7 @@ public interface SolicitudRepository extends CrudRepository<Solicitud, Long>{
 			"FROM   solicitudes AS sol " + 
 			"INNER JOIN usuarios AS usu ON (sol.id_usuario_solicitante=usu.id) " + 
 			"WHERE sol.fecha_creacion BETWEEN ?1 AND ?2 " + 
-			"GROUP  BY usu.usuario " + 
+			"GROUP  BY usu.usuario, usu.nombre_completo " + 
 			"ORDER  BY cantidad DESC ", nativeQuery = true)
 	public List<Object[]> findByUsuariosSolicitantes(Date fechaDesde, Date fechaHasta);
 

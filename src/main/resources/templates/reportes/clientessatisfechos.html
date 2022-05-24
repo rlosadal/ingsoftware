@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+	
+	<div th:replace="layout/layout :: menu"></div>
+	<div th:replace="layout/layout :: session"></div>
+	<div th:replace="layout/layout :: messages"></div>
+
+	<div class="container float-right py-4">
+
+		<div class="card">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<form th:action="@{/searchclientessatisfechos}" th:object="${filter}" method="get">
+				  <div class="form-row align-items-center">
+				    <div class="col-auto my-1">
+				      <label class="mr-sm-2" for="inlineFormCustomSelect">Fecha desde</label>
+				      <input type="date" th:field="*{fechaDesde}" class="form-control"/>
+				    </div>
+				    <div class="col-auto my-1">
+				      <label class="mr-sm-2" for="inlineFormCustomSelect">Fecha hasta</label>
+				      <input type="date" th:field="*{fechaHasta}" class="form-control"/>
+				    </div>
+				    <div class="col-auto my-1">
+				      <button type="submit" class="btn btn-primary">Buscar</button>
+				    </div>
+				  </div>
+				</form>
+				<br>
+				<p class="card-text"><span class="font-weight-bold">Total de solicitudes atendidas: </span><span th:text="${totalAtendidos}"></span></p>
+				<p class="card-text"><span class="font-weight-bold">Total clientes satisfechos: </span><span th:text="${totalSatisfechos}"></span></p>
+			</div>
+		</div>
+
+	</div>
+        <footer th:replace="layout/layout :: footer"></footer>	
+       
+</body>
+</html>

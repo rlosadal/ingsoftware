@@ -26,6 +26,10 @@ public interface SolicitudService {
 	
 	public Integer findByTimpoResolucion(Date fechaDesde, Date fechaHasta);
 	
+	public Integer findByTotalSolicitudesAtentendidas(Date fechaDesde, Date fechaHasta);
+	
+	public Integer findByTotalSolicitudesSatisfechas(Date fechaDesde, Date fechaHasta);
+	
 	public List<View> findBySolicitudesAtendidasPorPeriodo(Date fechaDesde, Date fechaHasta);
 	
 	public List<View> findBySolicitudesSinAtenderPorPeriodo(Date fechaDesde, Date fechaHasta);
