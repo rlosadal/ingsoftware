@@ -19,6 +19,8 @@ INSERT INTO roles (id,role,nombre) VALUES (2, 'HELP_DESK', 'MESA_DE_AYUDA');
 INSERT INTO roles (id,role,nombre) VALUES (3, 'SUPPORT', 'SOPORTE_TECNICO');
 INSERT INTO roles (id,role,nombre) VALUES (4, 'USER', 'USUARIO_COMUN');
 
+/* encriptar y desencriptar una password*/
+/* https://bcrypt-generator.com/*/
 
 INSERT INTO usuarios (id, usuario, role_id, area_id, email, password, apellido, nombres, nombre_completo) VALUES(1, 'mvega', 1 , 1, 'mvega@gmail.com', '$2a$12$k5i/Bv1QC1DIc3kpMWBC8uDIkeZ5ug3Zzb5OBp8clJZ2j8BKigJPW', 'Vega', 'Martin','Vega, Martin');
 INSERT INTO usuarios (id, usuario, role_id, area_id, email, password, apellido, nombres, nombre_completo) VALUES(2, 'alozada', 1 , 1, 'alozada@gmail.com', '$2a$12$k5i/Bv1QC1DIc3kpMWBC8uDIkeZ5ug3Zzb5OBp8clJZ2j8BKigJPW', 'Lozada', 'Andres','Lozada, Andres');
@@ -34,5 +36,4 @@ ALTER SEQUENCE PUBLIC.usuario_seq restart WITH 6;
 
 /*select nextval('solicitud_seq')*/
 
-/* encriptar y desencriptar una password*/
-/* https://bcrypt-generator.com/*/
+

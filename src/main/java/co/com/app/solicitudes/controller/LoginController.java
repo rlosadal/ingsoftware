@@ -9,6 +9,8 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login() {
 		
+		int a= 0;
+		
 		return "login";
 	
 	}
